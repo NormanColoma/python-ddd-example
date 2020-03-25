@@ -1,5 +1,10 @@
 import pinject
 
-from application import test_repository
+from application.test_repository import TestRepository
 
-obj_graph = pinject.new_object_graph(modules=[test_repository])
+class RepositoryBindingSpec(pinject.BindingSpec):
+	def provide_repository(self):
+		return TestRepository()
+
+
+obj_graph = pinject.new_object_graph(binding_specs=[RepositoryBindingSpec()])
