@@ -2,7 +2,7 @@ from functools import wraps
 
 from application import use_case
 from flask import Flask
-from container import obj_graph
+from ioc_container import obj_graph
 
 app = Flask(__name__)
 

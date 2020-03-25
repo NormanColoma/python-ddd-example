@@ -1,6 +1,6 @@
 import pinject
 
-from application.test_repository import TestRepository
+from infraestructure.test_repository import TestRepository
 
 class RepositoryBindingSpec(pinject.BindingSpec):
 	def provide_repository(self):

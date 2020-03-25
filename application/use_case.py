@@ -1,4 +1,4 @@
-from application.repository import Repository
+from domain.repository import Repository
 
 
 class UseCase:
