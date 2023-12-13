@@ -1,0 +1,6 @@
+six==1.15.0
+flask~=3.0.0
+pinject~=0.14.1
+pymongo~=4.3.3
+pytest~=7.2.0
+pytest-mock~=3.10.0

@@ -1,8 +1,7 @@
 from functools import wraps
-
-from application import use_case
 from flask import Flask
-from ioc_container import obj_graph
+from application.add_team import AddTeam
+from container import obj_graph
 
 app = Flask(__name__)
 
@@ -20,11 +19,11 @@ def has_permissions(permission):
     return decorated_function
 
 
-@app.route('/<id>')
+@app.route('/', methods=["POST"])
 # @has_permissions('read')
-def hello_world(id):
-    test = obj_graph.provide(use_case.UseCase)
-    return test.save()
+def add_team_route():
+    add_team = obj_graph.provide(AddTeam)
+    add_team.save()
 
 
 if __name__ == '__main__':
