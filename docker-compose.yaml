@@ -1,0 +1,33 @@
+version: "3.7"
+
+services:
+  api:
+    build: .
+    platform: linux/amd64
+    depends_on:
+      - mongo
+    environment:
+      ENV: run
+      MONGO_URI: "mongodb://admin:admin@mongo:27017"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/usr/src/app
+    networks:
+      - python_ddd
+  mongo:
+    image: mongo:5
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - python_ddd
+volumes:
+  api_modules:
+    driver: local
+networks:
+  python_ddd:

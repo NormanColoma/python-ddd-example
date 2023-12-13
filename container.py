@@ -24,7 +24,7 @@ class DatabaseHandlerInstance(pinject.BindingSpec):
 
 class DatabaseParser(pinject.BindingSpec):
 	def configure(self, bind):
-		bind('database_parser', annotated_with='tracking_event_parser', to_class=MongoTeamParser)
+		bind('database_parser', annotated_with='team_parser', to_class=MongoTeamParser)
 
 
 class Config(pinject.BindingSpec):

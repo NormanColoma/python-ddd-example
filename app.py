@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Flask
+from flask import Flask, Response
 from application.add_team import AddTeam
 from container import obj_graph
 
@@ -24,6 +24,7 @@ def has_permissions(permission):
 def add_team_route():
     add_team = obj_graph.provide(AddTeam)
     add_team.save()
+    return Response(status=201, mimetype='application/json')
 
 
 if __name__ == '__main__':
