@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 from uuid import UUID
 
@@ -10,6 +11,13 @@ class Team(DomainEntity):
         super().__init__(id, created_at)
         self.name = name
         self.players = []
+
+    @classmethod
+    def create(cls, name: str) -> 'Team':
+        return cls(
+            name=name,
+            id=uuid.uuid4(),
+            created_at=datetime.now())
 
     @property
     def name(self) -> str:

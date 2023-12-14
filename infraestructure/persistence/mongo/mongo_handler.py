@@ -17,4 +17,4 @@ class MongoHandler(DatabaseHandler):
     def __initialize(self) -> None:
         db = self.getDatabase()
         name_index = IndexModel([("name", 1)], name="name")
-        db.events.create_indexes([name_index])
+        db.teams.create_indexes([name_index])

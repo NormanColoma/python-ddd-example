@@ -1,6 +1,7 @@
 from functools import wraps
-from flask import Flask, Response
+from flask import Flask, request, Response
 from application.add_team import AddTeam
+from application.add_team_command import AddTeamCommand
 from container import obj_graph
 
 app = Flask(__name__)
@@ -22,8 +23,11 @@ def has_permissions(permission):
 @app.route('/', methods=["POST"])
 # @has_permissions('read')
 def add_team_route():
+    body = request.get_json()
+
     add_team = obj_graph.provide(AddTeam)
-    add_team.save()
+    command = AddTeamCommand(**body)
+    add_team.save(command)
     return Response(status=201, mimetype='application/json')
 
 
