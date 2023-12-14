@@ -1,10 +1,9 @@
 from functools import wraps
-from flask import Flask, request, Response
-from application.add_team import AddTeam
-from application.add_team_command import AddTeamCommand
-from container import obj_graph
+from flask import Flask
+from infraestructure.rest.team_controller import team_controller
 
 app = Flask(__name__)
+app.register_blueprint(team_controller)
 
 
 def has_permissions(permission):
@@ -18,17 +17,6 @@ def has_permissions(permission):
         return wrapped
 
     return decorated_function
-
-
-@app.route('/', methods=["POST"])
-# @has_permissions('read')
-def add_team_route():
-    body = request.get_json()
-
-    add_team = obj_graph.provide(AddTeam)
-    command = AddTeamCommand(**body)
-    add_team.save(command)
-    return Response(status=201, mimetype='application/json')
 
 
 if __name__ == '__main__':
