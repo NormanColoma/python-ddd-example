@@ -4,3 +4,4 @@ pinject~=0.14.1
 pymongo~=4.3.3
 pytest~=7.2.0
 pytest-mock~=3.10.0
+jsonschema~=4.20.0
