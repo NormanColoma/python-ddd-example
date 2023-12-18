@@ -1,7 +1,6 @@
 from flask import Blueprint, request, Response
-from application.add_team import AddTeam
 from application.add_team_command import AddTeamCommand
-from container import obj_graph
+from container import obj_graph, AddTeam
 from infraestructure.rest.validator.rest_validators import validate_request_body
 
 team_controller = Blueprint('team_controller', __name__)

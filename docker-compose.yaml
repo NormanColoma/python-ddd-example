@@ -9,10 +9,11 @@ services:
     environment:
       ENV: run
       MONGO_URI: "mongodb://admin:admin@mongo:27017"
+      FLASK_DEBUG: 1
     ports:
       - "5000:5000"
     volumes:
-      - ./:/usr/src/app
+      - .:/usr/src/app
     networks:
       - python_ddd
   mongo:
