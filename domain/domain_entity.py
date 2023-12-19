@@ -1,10 +1,9 @@
-from abc import ABC, abstractmethod
 from datetime import datetime
 from uuid import UUID
 from domain.invalid_domain_entity_error import InvalidDomainEntityError
 
 
-class DomainEntity(ABC):
+class DomainEntity:
     def __init__(self, id: UUID, created_at: datetime):
         self.id = id
         self.created_at = created_at
@@ -33,5 +32,4 @@ class DomainEntity(ABC):
             raise InvalidDomainEntityError('Field created_at must be a valid datetime type')
         self.__created_at = created_at
 
-    @abstractmethod
     def to_object(self) -> dict: raise NotImplementedError

@@ -3,7 +3,8 @@ import os
 import pinject
 from pymongo import MongoClient
 
-from application.add_team import AddTeam
+from application.add_team.add_team import AddTeam
+from application.get_team.get_team import GetTeam
 from infraestructure.config.config import app_config
 from infraestructure.persistence.mongo.mongo_handler import MongoHandler
 from infraestructure.persistence.mongo.mongo_team_parser import MongoTeamParser
@@ -43,6 +44,11 @@ class AddTeamUseCase(pinject.BindingSpec):
         return obj_graph.provide(AddTeam)
 
 
+class GetTeamUseCase(pinject.BindingSpec):
+    def provide_get_team(self):
+        return obj_graph.provide(GetTeam)
+
+
 obj_graph = pinject.new_object_graph(modules=None,
                                      binding_specs=[DatabaseHandlerInstance(), TeamRepository(),
-                                                    DatabaseParser(), Config(), AddTeamUseCase()])
+                                                    DatabaseParser(), Config(), AddTeamUseCase(), GetTeamUseCase()])

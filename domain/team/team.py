@@ -19,6 +19,13 @@ class Team(DomainEntity):
             id=uuid.uuid4(),
             created_at=datetime.now())
 
+    @classmethod
+    def build(cls, name: str, id: UUID, created_at: datetime) -> 'Team':
+        return cls(
+            name=name,
+            id=id,
+            created_at=created_at)
+
     @property
     def name(self) -> str:
         return self.__name

@@ -1,13 +1,12 @@
 import bson
 
-from domain.domain_entity import DomainEntity
 from domain.team.team import Team
 from infraestructure.persistence.database_parser import DatabaseParser
 
 
 class MongoTeamParser(DatabaseParser):
-    def to_domain_object(self, database_object: dict) -> DomainEntity:
-        pass
+    def to_domain_object(self, database_object: dict) -> Team:
+        return Team.build(database_object['name'], database_object['_id'], database_object['created_at'])
 
     def to_database_object(self, domain: Team) -> dict:
         document = dict()

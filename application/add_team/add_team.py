@@ -10,5 +10,4 @@ class AddTeam:
     def save(self, command: ApplicationCommand) -> None:
         command_fields = command.getFields()
         team: Team = Team.create(**command_fields)
-        print('Saving team')
         self.team_repository.save(team)

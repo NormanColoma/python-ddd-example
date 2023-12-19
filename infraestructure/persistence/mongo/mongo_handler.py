@@ -12,7 +12,7 @@ class MongoHandler(DatabaseHandler):
     def getDatabase(self) -> Any:
         db_uri = self.__config.MONGO_URI
         db_name = self.__config.DB_NAME
-        return MongoClient(db_uri)[db_name]
+        return MongoClient(db_uri, uuidRepresentation='standard')[db_name]
 
     def __initialize(self) -> None:
         db = self.getDatabase()

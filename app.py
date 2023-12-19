@@ -12,4 +12,4 @@ logging.basicConfig(level=logging.INFO, format='{"dateTime": "%(asctime)s", "lev
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
