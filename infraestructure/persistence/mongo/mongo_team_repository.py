@@ -1,4 +1,5 @@
 import logging
+from types import NoneType
 from uuid import UUID
 
 import pinject
@@ -17,7 +18,7 @@ class MongoTeamRepository(TeamRepository):
 
     def save(self, team: Team) -> None:
         document: dict = self.__team_parser.to_database_object(team)
-        self.__db.teams.insert_one(document)
+        self.__db.teams.replace_one({'_id': team.id}, document, upsert=True)
 
     def find(self, id: UUID) -> Team:
         document: dict = dict()
@@ -26,4 +27,4 @@ class MongoTeamRepository(TeamRepository):
         except Exception as e:
             logging.info(e)
 
-        return self.__team_parser.to_domain_object(document)
+        return None if isinstance(document, NoneType) else self.__team_parser.to_domain_object(document)

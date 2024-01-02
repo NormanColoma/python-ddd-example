@@ -6,7 +6,7 @@ from jsonschema.exceptions import ValidationError
 
 
 def handle_exception(e):
-    logging.info(e.args[0])
+    logging.info(type(e).__name__ + " due to: " + e.args[0])
     if isinstance(e, ValidationError):
         if e.validator == 'required':
             error_message = {

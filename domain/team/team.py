@@ -3,6 +3,7 @@ from datetime import datetime
 from uuid import UUID
 
 from domain.domain_entity import DomainEntity
+from domain.player.player import Player
 from domain.team.invalid_team_error import InvalidTeamError
 
 
@@ -20,11 +21,13 @@ class Team(DomainEntity):
             created_at=datetime.now())
 
     @classmethod
-    def build(cls, name: str, id: UUID, created_at: datetime) -> 'Team':
-        return cls(
+    def build(cls, name: str, id: UUID, created_at: datetime, players: [Player]) -> 'Team':
+        team = cls(
             name=name,
             id=id,
             created_at=created_at)
+        team.players = players
+        return team
 
     @property
     def name(self) -> str:
@@ -38,7 +41,10 @@ class Team(DomainEntity):
             raise InvalidTeamError('Field name must be a valid string type')
         self.__name = name
 
-    def add_player(self, player):
+    def add_player(self, player_name: str) -> None:
+        if len(self.players) >= 11:
+            raise InvalidTeamError('Team already has 11 players')
+        player = Player.create(player_name)
         self.players.append(player)
 
     def __str__(self):
