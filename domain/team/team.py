@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 from uuid import UUID
 
@@ -14,10 +13,10 @@ class Team(DomainEntity):
         self.players = []
 
     @classmethod
-    def create(cls, name: str) -> 'Team':
+    def create(cls, name: str, id: UUID) -> 'Team':
         return cls(
             name=name,
-            id=uuid.uuid4(),
+            id=id,
             created_at=datetime.now())
 
     @classmethod
@@ -47,12 +46,18 @@ class Team(DomainEntity):
         player = Player.create(player_name)
         self.players.append(player)
 
-    def __str__(self):
-        return self.name
-
     def to_object(self) -> dict:
         return {
             'id': self.id,
             'name': self.name,
             'created_at': self.created_at
         }
+
+    def __eq__(self, other):
+        if isinstance(other, Team):
+            return self.id == other.id
+        return False
+
+    def __str__(self):
+        return self.name
+
