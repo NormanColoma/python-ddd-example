@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from domain.domain_entity import DomainEntity
+from domain.core.domain_entity import DomainEntity
 
 
 class DatabaseParser(ABC):

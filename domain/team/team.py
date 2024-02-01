@@ -1,12 +1,13 @@
 from datetime import datetime
 from uuid import UUID
 
-from domain.domain_entity import DomainEntity
+from domain.core.aggregate_root import AggregateRoot
 from domain.player.player import Player
 from domain.team.invalid_team_error import InvalidTeamError
+from domain.team.team_created_event import TeamCreatedEvent
 
 
-class Team(DomainEntity):
+class Team(AggregateRoot):
     def __init__(self, name, id: UUID, created_at: datetime):
         super().__init__(id, created_at)
         self.name = name
@@ -14,10 +15,13 @@ class Team(DomainEntity):
 
     @classmethod
     def create(cls, name: str, id: UUID) -> 'Team':
-        return cls(
+        team: Team = cls(
             name=name,
             id=id,
             created_at=datetime.now())
+        team.add_event(TeamCreatedEvent(entity=team))
+
+        return team
 
     @classmethod
     def build(cls, name: str, id: UUID, created_at: datetime, players: [Player]) -> 'Team':

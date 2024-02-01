@@ -11,7 +11,7 @@ services:
       MONGO_URI: "mongodb://admin:admin@mongo:27017"
       FLASK_DEBUG: 1
     ports:
-      - "5000:5000"
+      - "3000:3000"
     volumes:
       - .:/usr/src/app
     networks:

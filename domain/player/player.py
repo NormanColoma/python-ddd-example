@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 
-from domain.domain_entity import DomainEntity
+from domain.core.domain_entity import DomainEntity
 from domain.player.invalid_player_error import InvalidPlayerError
 
 

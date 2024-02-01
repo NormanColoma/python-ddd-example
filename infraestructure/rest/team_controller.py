@@ -62,4 +62,6 @@ def get_team_route(team_id: str):
         response: GetTeamResponse = get_team.get(command)
         return Response(response=json.dumps(response.toJSON()), status=200, mimetype='application/json')
     except Exception as e:
+        if isinstance(e, TeamNotFoundError):
+            return Response(response=json.dumps({'message': 'Team not Found'}), status=404, mimetype='application/json')
         raise e

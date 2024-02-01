@@ -1,6 +1,7 @@
 from datetime import datetime
 from uuid import UUID
-from domain.invalid_domain_entity_error import InvalidDomainEntityError
+
+from domain.core.invalid_domain_entity_error import InvalidDomainEntityError
 
 
 class DomainEntity:

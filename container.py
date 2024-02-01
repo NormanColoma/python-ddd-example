@@ -6,6 +6,7 @@ from pymongo import MongoClient
 from application.add_player_to_team.add_player_to_team import AddPlayerToTeam
 from application.add_team.add_team import AddTeam
 from application.get_team.get_team import GetTeam
+from infraestructure.bus.event.fake_event_bus import FakeEventBus
 from infraestructure.config.config import app_config
 from infraestructure.persistence.mongo.mongo_handler import MongoHandler
 from infraestructure.persistence.mongo.mongo_team_parser import MongoTeamParser
@@ -54,8 +55,12 @@ class GetTeamUseCase(pinject.BindingSpec):
     def provide_get_team(self):
         return obj_graph.provide(GetTeam)
 
+class EventBus(pinject.BindingSpec):
+    def provide_event_bus(self):
+        return obj_graph.provide(FakeEventBus)
+
 
 obj_graph = pinject.new_object_graph(modules=None,
                                      binding_specs=[DatabaseHandlerInstance(), TeamRepository(),
                                                     DatabaseParser(), Config(), AddTeamUseCase(), GetTeamUseCase(),
-                                                    AddPlayerToTeamUseCase()])
+                                                    AddPlayerToTeamUseCase(), EventBus()])
