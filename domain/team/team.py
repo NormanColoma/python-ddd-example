@@ -5,6 +5,7 @@ from domain.core.aggregate_root import AggregateRoot
 from domain.player.player import Player
 from domain.team.invalid_team_error import InvalidTeamError
 from domain.team.team_created_event import TeamCreatedEvent
+from domain.team.team_modified_event import TeamModifiedEvent
 
 
 class Team(AggregateRoot):
@@ -49,6 +50,7 @@ class Team(AggregateRoot):
             raise InvalidTeamError('Team already has 11 players')
         player = Player.create(player_name)
         self.players.append(player)
+        self.add_event(TeamModifiedEvent(entity=self))
 
     def to_object(self) -> dict:
         return {
