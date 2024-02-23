@@ -1,9 +1,11 @@
+from application.application_response import ApplicationResponse
 
-class GetTeamResponse:
+
+class GetTeamResponse(ApplicationResponse):
     def __init__(self, team):
         self.team = team
 
-    def toJSON(self) -> dict:
+    def to_json(self) -> dict:
         return {
             'id': str(self.team.id),
             'name': self.team.name,

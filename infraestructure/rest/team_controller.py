@@ -5,6 +5,7 @@ from flask import Blueprint, request, Response, current_app
 from application.add_player_to_team.add_player_to_team_command import AddPlayerToTeamCommand
 from application.add_team.add_team import AddTeam
 from application.add_team.add_team_command import AddTeamCommand
+from application.application_response import ApplicationResponse
 from application.get_team.get_team_command import GetTeamCommand
 from application.get_team.get_team_response import GetTeamResponse
 from domain.team.team_not_found_error import TeamNotFoundError
@@ -56,8 +57,8 @@ def get_team_route(team_id: str):
         get_team = current_app.container.get_team()
         command = GetTeamCommand(uuid.UUID(team_id))
 
-        response: GetTeamResponse = get_team.execute(command)
-        return Response(response=json.dumps(response.toJSON()), status=200, mimetype='application/json')
+        response: ApplicationResponse = get_team.execute(command)
+        return Response(response=json.dumps(response.to_json()), status=200, mimetype='application/json')
     except Exception as e:
         if isinstance(e, TeamNotFoundError):
             return Response(response=json.dumps({'message': 'Team not Found'}), status=404, mimetype='application/json')
