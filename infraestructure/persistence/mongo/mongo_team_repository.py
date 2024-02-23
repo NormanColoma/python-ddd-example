@@ -1,17 +1,13 @@
 import logging
 from types import NoneType
 from uuid import UUID
-
-import pinject
 from domain.team.team import Team
 from domain.team.team_repository import TeamRepository
 from infraestructure.persistence.database_handler import DatabaseHandler
 from infraestructure.persistence.database_parser import DatabaseParser
-from infraestructure.persistence.mongo.mongo_team_parser import MongoTeamParser
 
 
 class MongoTeamRepository(TeamRepository):
-    @pinject.annotate_arg('database_parser', 'team_parser')
     def __init__(self, database_handler: DatabaseHandler, database_parser: DatabaseParser):
         self.__db = database_handler.getDatabase()
         self.__team_parser: DatabaseParser = database_parser

@@ -1,7 +1,6 @@
 import os
 
-import pinject
-from pymongo import MongoClient
+from dependency_injector import containers, providers
 
 from application.add_player_to_team.add_player_to_team import AddPlayerToTeam
 from application.add_team.add_team import AddTeam
@@ -13,54 +12,36 @@ from infraestructure.persistence.mongo.mongo_team_parser import MongoTeamParser
 from infraestructure.persistence.mongo.mongo_team_repository import MongoTeamRepository
 
 
-class MongoClientInstance(pinject.BindingSpec):
-    def provide_database_handler(self):
-        env = os.getenv('ENV') or 'run'
-        db_uri = app_config[env].MONGO_URI
-        return MongoClient(db_uri)
+class Container(containers.DeclarativeContainer):
+    database_handler = providers.Singleton(
+        MongoHandler,
+        config=app_config[os.getenv('ENV')]
+    )
 
+    database_parser = providers.Singleton(MongoTeamParser)
 
-class DatabaseHandlerInstance(pinject.BindingSpec):
-    def provide_database_handler(self):
-        return obj_graph.provide(MongoHandler)
+    event_bus = providers.Singleton(FakeEventBus)
 
+    team_repository = providers.Singleton(
+        MongoTeamRepository,
+        database_handler,
+        database_parser,
+    )
 
-class DatabaseParser(pinject.BindingSpec):
-    def configure(self, bind):
-        bind('database_parser', annotated_with='team_parser', to_class=MongoTeamParser)
+    add_team = providers.Singleton(
+        AddTeam,
+        team_repository,
+        event_bus,
+    )
 
+    get_team = providers.Singleton(
+        GetTeam,
+        team_repository
+    )
 
-class Config(pinject.BindingSpec):
-    def provide_config(self):
-        env = os.getenv('ENV') or 'run'
-        return app_config[env]
+    add_player_to_team = providers.Singleton(
+        AddPlayerToTeam,
+        team_repository,
+        event_bus
+    )
 
-
-class TeamRepository(pinject.BindingSpec):
-    def provide_team_repository(self):
-        return obj_graph.provide(MongoTeamRepository)
-
-
-class AddTeamUseCase(pinject.BindingSpec):
-    def provide_add_team(self):
-        return obj_graph.provide(AddTeam)
-
-
-class AddPlayerToTeamUseCase(pinject.BindingSpec):
-    def provide_add_player_to_team(self):
-        return obj_graph.provide(AddPlayerToTeam)
-
-
-class GetTeamUseCase(pinject.BindingSpec):
-    def provide_get_team(self):
-        return obj_graph.provide(GetTeam)
-
-class EventBus(pinject.BindingSpec):
-    def provide_event_bus(self):
-        return obj_graph.provide(FakeEventBus)
-
-
-obj_graph = pinject.new_object_graph(modules=None,
-                                     binding_specs=[DatabaseHandlerInstance(), TeamRepository(),
-                                                    DatabaseParser(), Config(), AddTeamUseCase(), GetTeamUseCase(),
-                                                    AddPlayerToTeamUseCase(), EventBus()])

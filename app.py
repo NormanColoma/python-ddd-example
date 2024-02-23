@@ -1,15 +1,23 @@
 import logging
 from flask import Flask
+
+from container import Container
 from infraestructure.rest.error_handler import handle_exception
 from infraestructure.rest.team_controller import team_controller
-
-app = Flask(__name__)
-app.register_blueprint(team_controller)
-app.register_error_handler(Exception, handle_exception)
 
 logging.basicConfig(level=logging.INFO, format='{"dateTime": "%(asctime)s", "level": "info", "message": "%(message)s"}',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
 
+def create_app():
+    flask_app = Flask(__name__)
+    flask_app.register_blueprint(team_controller)
+    flask_app.register_error_handler(Exception, handle_exception)
+    container = Container()
+    flask_app.container = container
+    return flask_app
+
+
 if __name__ == '__main__':
+    app = create_app()
     app.run(host='0.0.0.0', port=3000)
