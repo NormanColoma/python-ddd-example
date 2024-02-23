@@ -1,11 +1,14 @@
+import uuid
+from abc import ABC, abstractmethod
 from datetime import datetime
 from uuid import UUID
 
 from domain.core.invalid_domain_entity_error import InvalidDomainEntityError
 
 
-class DomainEntity:
-    def __init__(self, id: UUID, created_at: datetime):
+class DomainEntity(ABC):
+    @abstractmethod
+    def __init__(self, id: UUID = uuid.uuid4(), created_at: datetime = datetime.now()):
         self.id = id
         self.created_at = created_at
 

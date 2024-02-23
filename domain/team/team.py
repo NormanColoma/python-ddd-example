@@ -1,6 +1,5 @@
 from datetime import datetime
 from uuid import UUID
-
 from domain.core.aggregate_root import AggregateRoot
 from domain.player.player import Player
 from domain.team.invalid_team_error import InvalidTeamError
