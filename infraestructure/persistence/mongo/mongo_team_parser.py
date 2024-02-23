@@ -7,7 +7,8 @@ from infraestructure.persistence.database_parser import DatabaseParser
 
 class MongoTeamParser(DatabaseParser):
     def to_domain_object(self, database_object: dict) -> Team:
-        players: [Player] = [Player.build(player['name'], player['id'], player['created_at']) for player in database_object['players']]
+        players: [Player] = [Player.build(player['name'], player['id'], player['created_at'])
+                             for player in database_object['players']]
         return Team.build(database_object['name'], database_object['_id'], database_object['created_at'],
                           players)
 

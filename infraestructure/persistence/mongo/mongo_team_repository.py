@@ -1,6 +1,9 @@
 import logging
 from types import NoneType
+from typing import TypeVar
 from uuid import UUID
+
+from domain.core.domain_entity import DomainEntity
 from domain.team.team import Team
 from domain.team.team_repository import TeamRepository
 from infraestructure.persistence.database_handler import DatabaseHandler
@@ -16,7 +19,7 @@ class MongoTeamRepository(TeamRepository):
         document: dict = self.__team_parser.to_database_object(team)
         self.__db.teams.replace_one({'_id': team.id}, document, upsert=True)
 
-    def find(self, id: UUID) -> Team:
+    def find(self, id: UUID) -> Team | None:
         document: dict = dict()
         try:
             document = self.__db.teams.find_one({'_id': id})
