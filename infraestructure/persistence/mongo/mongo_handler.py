@@ -9,12 +9,12 @@ class MongoHandler(DatabaseHandler):
         self.__config = config
         self.__initialize()
 
-    def getDatabase(self) -> Any:
+    def get_database(self) -> Any:
         db_uri = self.__config.MONGO_URI
         db_name = self.__config.DB_NAME
         return MongoClient(db_uri, uuidRepresentation='standard')[db_name]
 
     def __initialize(self) -> None:
-        db = self.getDatabase()
+        db = self.get_database()
         name_index = IndexModel([("name", 1)], name="name")
         db.teams.create_indexes([name_index])

@@ -4,4 +4,4 @@ from typing import Any
 
 class DatabaseHandler(ABC):
     @abstractmethod
-    def getDatabase(self) -> Any: raise NotImplementedError
+    def get_database(self) -> Any: raise NotImplementedError

@@ -9,7 +9,7 @@ from infraestructure.persistence.database_parser import DatabaseParser
 
 class MongoTeamRepository(TeamRepository):
     def __init__(self, database_handler: DatabaseHandler, database_parser: DatabaseParser):
-        self.__db = database_handler.getDatabase()
+        self.__db = database_handler.get_database()
         self.__team_parser: DatabaseParser = database_parser
 
     def save(self, team: Team) -> None:
