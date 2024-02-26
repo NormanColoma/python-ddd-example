@@ -2,6 +2,9 @@ import uuid
 from datetime import datetime
 from unittest.mock import MagicMock
 from uuid import UUID
+
+import pytest
+
 from application.add_team.add_team import AddTeam
 from application.add_team.add_team_command import AddTeamCommand
 from domain.team.team import Team
@@ -12,19 +15,26 @@ created_at_str = "2022-12-14T12:28:17.893609Z"
 createdAt = datetime.fromisoformat(created_at_str)
 name: str = 'team'
 
+repository = MagicMock()
+event_bus = MagicMock()
 
-def test_should_add_team_correctly(mocker):
+
+@pytest.fixture
+def app_service():
+    add_team = AddTeam(repository, event_bus)
+    repository.reset_mock()
+    event_bus.reset_mock()
+    yield add_team
+
+
+def test_should_add_team_correctly(mocker, app_service):
     mocker.patch('uuid.uuid4', return_value=id)
-    repository: TeamRepository = mocker.patch('domain.team.team_repository')
     team_domain = mocker.patch('domain.team.team')
 
-    add_team: AddTeam = AddTeam(repository)
-
-    repository.save = MagicMock()
     expected_team: Team = Team(name, id, createdAt)
     team_domain.create.return_value = expected_team
 
     command: AddTeamCommand = AddTeamCommand(name)
-    add_team.add(command)
+    app_service.execute(command)
 
     repository.save.assert_called_once_with(expected_team)
