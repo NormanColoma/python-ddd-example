@@ -5,10 +5,9 @@ from uuid import UUID
 
 import pytest
 
-from application.add_team.add_team import AddTeam
-from application.add_team.add_team_command import AddTeamCommand
-from domain.team.team import Team
-from domain.team.team_repository import TeamRepository
+from src.application.add_team.add_team import AddTeam
+from src.application.add_team.add_team_command import AddTeamCommand
+from src.domain.team.team import Team
 
 id: UUID = uuid.UUID('cdd8f937-52a2-4291-baf1-51520c41a2ab')
 created_at_str = "2022-12-14T12:28:17.893609Z"
@@ -29,7 +28,7 @@ def app_service():
 
 def test_should_add_team_correctly(mocker, app_service):
     mocker.patch('uuid.uuid4', return_value=id)
-    team_domain = mocker.patch('domain.team.team')
+    team_domain = mocker.patch('src.domain.team.team')
 
     expected_team: Team = Team(name, id, createdAt)
     team_domain.create.return_value = expected_team

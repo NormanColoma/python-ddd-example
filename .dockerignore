@@ -1,2 +1,7 @@
 venv
 Dockerfile
+docker-compose.yaml
+pytest.ini
+test
+.gitignore
+.dockerignore

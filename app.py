@@ -1,9 +1,10 @@
 import logging
 from flask import Flask
 
-from container import Container
-from infraestructure.rest.error_handler import handle_exception
-from infraestructure.rest.team_controller import team_controller
+
+from src.infraestructure.rest.error_handler import handle_exception
+from src.infraestructure.rest.team_controller import team_controller
+from src.container import Container
 
 logging.basicConfig(level=logging.INFO, format='{"dateTime": "%(asctime)s", "level": "info", "message": "%(message)s"}',
                     datefmt='%Y-%m-%d %H:%M:%S')
