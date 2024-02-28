@@ -15,7 +15,7 @@ from src.infraestructure.persistence.mongo.mongo_team_repository import MongoTea
 class Container(containers.DeclarativeContainer):
     database_handler = providers.Singleton(
         MongoHandler,
-        config=app_config[os.getenv('ENV')]
+        config=app_config[os.getenv('ENV') or 'test']
     )
 
     database_parser = providers.Singleton(MongoTeamParser)

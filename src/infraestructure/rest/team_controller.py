@@ -21,7 +21,7 @@ post_request_contract = {
 }
 
 
-@team_controller.route('/', methods=["POST"])
+@team_controller.route('', methods=["POST"])
 @validate_request_body(request, request_contract=post_request_contract)
 def add_team_route():
     try:

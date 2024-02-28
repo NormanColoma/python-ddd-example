@@ -12,13 +12,12 @@ class AddPlayerToTeam(ApplicationService):
         self.bus = event_bus
 
     def execute(self, command: AddPlayerToTeamCommand) -> None:
-        command_fields = command.getFields()
-        team: Team = self.team_repository.find(command_fields['team_id'])
+        team: Team = self.team_repository.find(command.team_id)
 
         if team is None:
             raise TeamNotFoundError('Team not found')
 
-        team.add_player(command_fields['player_name'])
+        team.add_player(command.player_name)
 
         self.team_repository.save(team)
         self.bus.publish(team.pull_events())

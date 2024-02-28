@@ -13,8 +13,7 @@ class AddTeam(ApplicationService):
         self.bus = event_bus
 
     def execute(self, command: AddTeamCommand) -> None:
-        command_fields = command.getFields()
-        team: Team = Team.create(name=command_fields['name'], id=uuid.uuid4())
+        team: Team = Team.create(name=command.name, id=uuid.uuid4())
         self.team_repository.save(team)
 
         self.bus.publish(team.pull_events())

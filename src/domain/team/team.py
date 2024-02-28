@@ -53,9 +53,8 @@ class Team(AggregateRoot):
 
     def to_object(self) -> dict:
         return {
-            'id': self.id,
+            **super().to_object(),
             'name': self.name,
-            'created_at': self.created_at
         }
 
     def __eq__(self, other):

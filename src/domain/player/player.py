@@ -40,7 +40,6 @@ class Player(DomainEntity):
 
     def to_object(self):
         return {
-            'id': self.id,
+            **super().to_object(),
             'name': self.name,
-            'created_at': self.created_at
         }

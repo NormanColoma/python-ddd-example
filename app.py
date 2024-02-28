@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='{"dateTime": "%(asctime)s", "lev
 
 def create_app():
     flask_app = Flask(__name__)
-    flask_app.register_blueprint(team_controller)
+    flask_app.register_blueprint(team_controller, url_prefix='/teams')
     flask_app.register_error_handler(Exception, handle_exception)
     container = Container()
     flask_app.container = container

@@ -1,6 +1,5 @@
-from abc import abstractmethod, ABC
+from abc import ABC
 
 
 class ApplicationCommand(ABC):
-    @abstractmethod
-    def getFields(self) -> dict: raise NotImplementedError
+    pass

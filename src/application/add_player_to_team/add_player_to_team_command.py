@@ -8,8 +8,10 @@ class AddPlayerToTeamCommand(ApplicationCommand):
         self.__player_name= player_name
         self.__team_id = team_id
 
-    def getFields(self):
-        return {
-            'player_name': self.__player_name,
-            'team_id': self.__team_id,
-        }
+    @property
+    def team_id(self) -> UUID:
+        return self.__team_id
+
+    @property
+    def player_name(self) -> str:
+        return self.__player_name

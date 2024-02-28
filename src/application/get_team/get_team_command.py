@@ -7,7 +7,6 @@ class GetTeamCommand(ApplicationCommand):
     def __init__(self, id: UUID):
         self.__id = id
 
-    def getFields(self):
-        return {
-            'id': self.__id,
-        }
+    @property
+    def id(self) -> UUID:
+        return self.__id
