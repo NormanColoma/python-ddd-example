@@ -24,19 +24,16 @@ post_request_contract = {
 @team_controller.route('', methods=["POST"])
 @validate_request_body(request, request_contract=post_request_contract)
 def add_team_route():
-    try:
-        body = request.get_json()
-        add_team: AddTeam = current_app.container.add_team()
-        command = AddTeamCommand(**body)
-        add_team.execute(command)
-        return Response(status=201, mimetype='application/json')
-    except Exception as e:
-        raise e
+    body = request.get_json()
+    add_team: AddTeam = current_app.container.add_team()
+    command = AddTeamCommand(**body)
+    add_team.execute(command)
+    return Response(status=201, mimetype='application/json')
 
 
 @team_controller.route('/<team_id>/players', methods=["POST"])
 @validate_request_body(request, request_contract=post_request_contract)
-def add__player_to_team_route(team_id: str):
+def add_player_to_team_route(team_id: str):
     try:
         body = request.get_json()
         add_player_to_team = current_app.container.add_player_to_team()
@@ -46,7 +43,7 @@ def add__player_to_team_route(team_id: str):
         return Response(status=201, mimetype='application/json')
     except Exception as e:
         if isinstance(e, TeamNotFoundError):
-            return Response(response=json.dumps({'message': 'Team not Found'}), status=404, mimetype='application/json')
+            return Response(response=json.dumps({'message': e.message}), status=404, mimetype='application/json')
         raise e
 
 
@@ -60,5 +57,5 @@ def get_team_route(team_id: str):
         return Response(response=json.dumps(response.to_json()), status=200, mimetype='application/json')
     except Exception as e:
         if isinstance(e, TeamNotFoundError):
-            return Response(response=json.dumps({'message': 'Team not Found'}), status=404, mimetype='application/json')
+            return Response(response=json.dumps({'message': e.message}), status=404, mimetype='application/json')
         raise e
