@@ -7,7 +7,6 @@ import pytest
 
 from src.application.add_team.add_team import AddTeam
 from src.application.add_team.add_team_command import AddTeamCommand
-from src.domain.team.team import Team
 
 id: UUID = uuid.UUID('cdd8f937-52a2-4291-baf1-51520c41a2ab')
 created_at_str = "2022-12-14T12:28:17.893609Z"
@@ -21,19 +20,20 @@ event_bus = MagicMock()
 @pytest.fixture
 def app_service():
     add_team = AddTeam(repository, event_bus)
+    yield add_team
     repository.reset_mock()
     event_bus.reset_mock()
-    yield add_team
 
 
 def test_should_add_team_correctly(mocker, app_service):
     mocker.patch('uuid.uuid4', return_value=id)
-    team_domain = mocker.patch('src.domain.team.team')
-
-    expected_team: Team = Team(name, id, createdAt)
-    team_domain.create.return_value = expected_team
+    team_mock = MagicMock()
+    team_mock.pull_events.return_value = []
+    create_mock = mocker.patch('src.domain.team.team.Team.create', return_value=team_mock)
 
     command: AddTeamCommand = AddTeamCommand(name)
     app_service.execute(command)
 
-    repository.save.assert_called_once_with(expected_team)
+    create_mock.assert_called_once_with(name=name, id=id)
+    team_mock.pull_events.assert_called_once()
+    event_bus.publish.assert_called_once_with([])

@@ -5,3 +5,6 @@ pytest.ini
 test
 .gitignore
 .dockerignore
+README.md
+data
+.idea
