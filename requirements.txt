@@ -5,3 +5,4 @@ pytest~=7.2.0
 pytest-mock~=3.10.0
 jsonschema~=4.20.0
 dependency-injector~=4.41.0
+freezegun~=1.4.0

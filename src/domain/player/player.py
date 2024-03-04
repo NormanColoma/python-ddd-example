@@ -38,6 +38,9 @@ class Player(DomainEntity):
     def __str__(self):
         return self.name
 
+    def __eq__(self, other: 'Player') -> bool:
+        return self.name == other.name and self.id == other.id and self.created_at == other.created_at
+
     def to_object(self) -> dict:
         return {
             **super().to_object(),
