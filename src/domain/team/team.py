@@ -57,7 +57,7 @@ class Team(AggregateRoot):
             'name': self.name,
         }
 
-    def __eq__(self, other):
+    def __eq__(self, other: 'Team') -> bool:
         if isinstance(other, Team):
             return self.id == other.id
         return False
