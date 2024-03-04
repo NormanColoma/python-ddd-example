@@ -11,7 +11,7 @@ from src.domain.player.player import Player
 @freeze_time("2012-01-01")
 class TestPlayerDomainEntity:
     id = uuid.uuid4()
-    name = 'team'
+    name = 'player'
     created_at = datetime.datetime.now()
 
     def test_should_raise_exception_when_name_is_empty(self):

@@ -44,6 +44,14 @@ class Team(AggregateRoot):
             raise InvalidTeamError('Field name must be a valid string type')
         self.__name = name
 
+    @property
+    def players(self) -> [Player]:
+        return self.__players
+
+    @players.setter
+    def players(self, players: [Player]) -> None:
+        self.__players = players
+
     def sign_player(self, player_name: str) -> None:
         if len(self.players) >= 11:
             raise InvalidTeamError('Team already has 11 players')
@@ -55,6 +63,7 @@ class Team(AggregateRoot):
         return {
             **super().to_object(),
             'name': self.name,
+            'players': [player.to_object() for player in self.players],
         }
 
     def __eq__(self, other: 'Team') -> bool:
