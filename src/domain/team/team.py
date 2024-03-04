@@ -44,7 +44,7 @@ class Team(AggregateRoot):
             raise InvalidTeamError('Field name must be a valid string type')
         self.__name = name
 
-    def add_player(self, player_name: str) -> None:
+    def sign_player(self, player_name: str) -> None:
         if len(self.players) >= 11:
             raise InvalidTeamError('Team already has 11 players')
         player = Player.create(player_name)

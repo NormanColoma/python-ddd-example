@@ -4,9 +4,9 @@ from unittest.mock import MagicMock
 import pytest
 
 from app import create_app
-from src.application.add_player_to_team.add_player_to_team_command import AddPlayerToTeamCommand
-from src.application.add_team.add_team_command import AddTeamCommand
+from src.application.create_team.create_team_command import CreateTeamCommand
 from src.application.get_team.get_team_command import GetTeamCommand
+from src.application.sign_player.sign_player_command import SignPlayerCommand
 from src.domain.core.applicaton_error import ApplicationError
 from src.domain.team.team_not_found_error import TeamNotFoundError
 
@@ -23,15 +23,15 @@ def app():
     yield app
 
 
-class TestAddTeamEndpoint:
+class TestCreateTeamEndpoint:
     @pytest.fixture
-    def add_team_mock(self):
-        add_team_mock = MagicMock()
-        yield add_team_mock
+    def create_team_mock(self):
+        create_team_mock = MagicMock()
+        yield create_team_mock
 
     @pytest.fixture
-    def client(self, app, add_team_mock):
-        app.container.add_team.override(add_team_mock)
+    def client(self, app, create_team_mock):
+        app.container.create_team.override(create_team_mock)
 
         with app.app_context():
             with app.test_client() as client:
@@ -45,97 +45,97 @@ class TestAddTeamEndpoint:
             'message': "Field 'name' is a required property"
         }
 
-    def test_should_return_422_when_there_is_application_error(self, client, add_team_mock):
-        add_team_mock.execute.side_effect = ApplicationError("error")
+    def test_should_return_422_when_there_is_application_error(self, client, create_team_mock):
+        create_team_mock.execute.side_effect = ApplicationError("error")
         result = client.post('/teams', json={"name": "F.C. Barcelona"})
 
         assert result.status_code == 422
         assert result.json == {'message': "error"}
-        expected_command = AddTeamCommand(name="F.C. Barcelona")
-        add_team_mock.execute.assert_called_once()
-        assert isinstance(add_team_mock.execute.call_args.args[0], AddTeamCommand)
-        assert add_team_mock.execute.call_args.args[0].name == expected_command.name
+        expected_command = CreateTeamCommand(name="F.C. Barcelona")
+        create_team_mock.execute.assert_called_once()
+        assert isinstance(create_team_mock.execute.call_args.args[0], CreateTeamCommand)
+        assert create_team_mock.execute.call_args.args[0].name == expected_command.name
 
-    def test_should_return_500_when_there_is_a_server_error(self, client, add_team_mock):
-        add_team_mock.execute.side_effect = Exception("error")
+    def test_should_return_500_when_there_is_a_server_error(self, client, create_team_mock):
+        create_team_mock.execute.side_effect = Exception("error")
         result = client.post('/teams', json={"name": "F.C. Barcelona"})
 
         assert result.status_code == 500
         assert result.json == {'message': "Internal server error"}
-        expected_command = AddTeamCommand(name="F.C. Barcelona")
-        add_team_mock.execute.assert_called_once()
-        assert isinstance(add_team_mock.execute.call_args.args[0], AddTeamCommand)
-        assert add_team_mock.execute.call_args.args[0].name == expected_command.name
+        expected_command = CreateTeamCommand(name="F.C. Barcelona")
+        create_team_mock.execute.assert_called_once()
+        assert isinstance(create_team_mock.execute.call_args.args[0], CreateTeamCommand)
+        assert create_team_mock.execute.call_args.args[0].name == expected_command.name
 
-    def test_should_return_201_when_team_created(self, client, add_team_mock):
+    def test_should_return_201_when_team_created(self, client, create_team_mock):
         result = client.post('/teams', json={"name": "F.C. Barcelona"})
 
         assert result.status_code == 201
-        expected_command = AddTeamCommand(name="F.C. Barcelona")
-        add_team_mock.execute.assert_called_once()
-        assert isinstance(add_team_mock.execute.call_args.args[0], AddTeamCommand)
-        assert add_team_mock.execute.call_args.args[0].name == expected_command.name
+        expected_command = CreateTeamCommand(name="F.C. Barcelona")
+        create_team_mock.execute.assert_called_once()
+        assert isinstance(create_team_mock.execute.call_args.args[0], CreateTeamCommand)
+        assert create_team_mock.execute.call_args.args[0].name == expected_command.name
 
 
-class TestAddPlayerToTeamEndpoint:
+class TestSignPlayerEndpoint:
     @pytest.fixture
-    def add_player_to_team_mock(self):
-        add_player_to_team_mock = MagicMock()
-        yield add_player_to_team_mock
+    def sign_player_mock(self):
+        sign_player_mock = MagicMock()
+        yield sign_player_mock
 
     @pytest.fixture
-    def client(self, app, add_player_to_team_mock):
-        app.container.add_player_to_team.override(add_player_to_team_mock)
+    def client(self, app, sign_player_mock):
+        app.container.sign_player.override(sign_player_mock)
 
         with app.app_context():
             with app.test_client() as client:
                 yield client
 
-    def test_should_return_404_when_team_is_not_found(self, client, add_player_to_team_mock):
-        add_player_to_team_mock.execute.side_effect = TeamNotFoundError("error")
+    def test_should_return_404_when_team_is_not_found(self, client, sign_player_mock):
+        sign_player_mock.execute.side_effect = TeamNotFoundError("error")
         result = client.post('/teams/e154e156-6d6f-402f-b571-d83fc7d605f2/players', json={"name": player_name})
 
         assert result.status_code == 404
         assert result.json == {'message': "error"}
-        expected_command = AddPlayerToTeamCommand(player_name, team_id)
-        add_player_to_team_mock.execute.assert_called_once()
-        assert isinstance(add_player_to_team_mock.execute.call_args.args[0], AddPlayerToTeamCommand)
-        assert add_player_to_team_mock.execute.call_args.args[0].player_name == expected_command.player_name
-        assert add_player_to_team_mock.execute.call_args.args[0].team_id == expected_command.team_id
+        expected_command = SignPlayerCommand(player_name, team_id)
+        sign_player_mock.execute.assert_called_once()
+        assert isinstance(sign_player_mock.execute.call_args.args[0], SignPlayerCommand)
+        assert sign_player_mock.execute.call_args.args[0].player_name == expected_command.player_name
+        assert sign_player_mock.execute.call_args.args[0].team_id == expected_command.team_id
 
-    def test_should_return_422_when_there_is_application_error(self, client, add_player_to_team_mock):
-        add_player_to_team_mock.execute.side_effect = ApplicationError("error")
+    def test_should_return_422_when_there_is_application_error(self, client, sign_player_mock):
+        sign_player_mock.execute.side_effect = ApplicationError("error")
         result = client.post('/teams/e154e156-6d6f-402f-b571-d83fc7d605f2/players', json={"name": player_name})
 
         assert result.status_code == 422
         assert result.json == {'message': "error"}
-        expected_command = AddPlayerToTeamCommand(player_name, team_id)
-        add_player_to_team_mock.execute.assert_called_once()
-        assert isinstance(add_player_to_team_mock.execute.call_args.args[0], AddPlayerToTeamCommand)
-        assert add_player_to_team_mock.execute.call_args.args[0].player_name == expected_command.player_name
-        assert add_player_to_team_mock.execute.call_args.args[0].team_id == expected_command.team_id
+        expected_command = SignPlayerCommand(player_name, team_id)
+        sign_player_mock.execute.assert_called_once()
+        assert isinstance(sign_player_mock.execute.call_args.args[0], SignPlayerCommand)
+        assert sign_player_mock.execute.call_args.args[0].player_name == expected_command.player_name
+        assert sign_player_mock.execute.call_args.args[0].team_id == expected_command.team_id
 
-    def test_should_return_500_when_there_is_internal_error(self, client, add_player_to_team_mock):
-        add_player_to_team_mock.execute.side_effect = Exception("error")
+    def test_should_return_500_when_there_is_internal_error(self, client, sign_player_mock):
+        sign_player_mock.execute.side_effect = Exception("error")
         result = client.post('/teams/e154e156-6d6f-402f-b571-d83fc7d605f2/players', json={"name": player_name})
 
         assert result.status_code == 500
         assert result.json == {'message': "Internal server error"}
-        expected_command = AddPlayerToTeamCommand(player_name, team_id)
-        add_player_to_team_mock.execute.assert_called_once()
-        assert isinstance(add_player_to_team_mock.execute.call_args.args[0], AddPlayerToTeamCommand)
-        assert add_player_to_team_mock.execute.call_args.args[0].player_name == expected_command.player_name
-        assert add_player_to_team_mock.execute.call_args.args[0].team_id == expected_command.team_id
+        expected_command = SignPlayerCommand(player_name, team_id)
+        sign_player_mock.execute.assert_called_once()
+        assert isinstance(sign_player_mock.execute.call_args.args[0], SignPlayerCommand)
+        assert sign_player_mock.execute.call_args.args[0].player_name == expected_command.player_name
+        assert sign_player_mock.execute.call_args.args[0].team_id == expected_command.team_id
 
-    def test_should_return_201_when_player_added_to_team(self, client, add_player_to_team_mock):
+    def test_should_return_201_when_player_signed(self, client, sign_player_mock):
         result = client.post('/teams/e154e156-6d6f-402f-b571-d83fc7d605f2/players', json={"name": player_name})
 
         assert result.status_code == 201
-        expected_command = AddPlayerToTeamCommand(player_name, team_id)
-        add_player_to_team_mock.execute.assert_called_once()
-        assert isinstance(add_player_to_team_mock.execute.call_args.args[0], AddPlayerToTeamCommand)
-        assert add_player_to_team_mock.execute.call_args.args[0].player_name == expected_command.player_name
-        assert add_player_to_team_mock.execute.call_args.args[0].team_id == expected_command.team_id
+        expected_command = SignPlayerCommand(player_name, team_id)
+        sign_player_mock.execute.assert_called_once()
+        assert isinstance(sign_player_mock.execute.call_args.args[0], SignPlayerCommand)
+        assert sign_player_mock.execute.call_args.args[0].player_name == expected_command.player_name
+        assert sign_player_mock.execute.call_args.args[0].team_id == expected_command.team_id
 
 
 class TestGetTeamGetEndpoint:

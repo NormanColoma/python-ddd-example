@@ -5,8 +5,6 @@ from uuid import UUID
 
 import pytest
 
-from src.application.add_player_to_team.add_player_to_team import AddPlayerToTeam
-from src.application.add_player_to_team.add_player_to_team_command import AddPlayerToTeamCommand
 from src.application.get_team.get_team import GetTeam
 from src.application.get_team.get_team_command import GetTeamCommand
 from src.application.get_team.get_team_response import GetTeamResponse

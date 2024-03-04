@@ -1,7 +1,7 @@
 from src.application.application_command import ApplicationCommand
 
 
-class AddTeamCommand(ApplicationCommand):
+class CreateTeamCommand(ApplicationCommand):
     def __init__(self, name: str):
         self.__name = name
 
