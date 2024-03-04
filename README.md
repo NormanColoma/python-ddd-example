@@ -4,9 +4,7 @@ This repository was created with the proposal of using it as a boilerplate for c
 applications in Python. This example presents a relatively simple problem, our focus will be 
 on applying DDD principles in Python. In a real world scenario we would have a more complex business rules than that.
 
-## Project explanation 
-
----
+## Project explanation
 
 For this example we’re going to build a very simple application for managing football teams where we can:
 
@@ -21,8 +19,6 @@ Let’s consider some restrictions and invariants within our domain:
 * A team cannot hire more than eleven players
 
 ## How to run
-
----
 
 ### Requirements
 
