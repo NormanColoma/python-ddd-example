@@ -23,7 +23,7 @@ post_request_contract = {
 
 @team_controller.route('', methods=["POST"])
 @validate_request_body(request, request_contract=post_request_contract)
-def add_team_route():
+def create_team_route():
     body = request.get_json()
     create_team: CreateTeam = current_app.container.create_team()
     command = CreateTeamCommand(**body)
@@ -33,7 +33,7 @@ def add_team_route():
 
 @team_controller.route('/<team_id>/players', methods=["POST"])
 @validate_request_body(request, request_contract=post_request_contract)
-def add_player_to_team_route(team_id: str):
+def sign_player_route(team_id: str):
     try:
         body = request.get_json()
         sign_player = current_app.container.sign_player()
