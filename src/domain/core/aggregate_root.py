@@ -13,7 +13,10 @@ class AggregateRoot(DomainEntity):
         self.__events = []
 
     def pull_events(self) -> [DomainEvent]:
-        return self.__events
+        events = self.__events
+        self.__events = []
+        return events
 
     def add_event(self, event: DomainEvent) -> None:
-        self.__events.append(event)
+        if isinstance(event, DomainEvent):
+            self.__events.append(event)
