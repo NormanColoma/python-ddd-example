@@ -1,7 +1,7 @@
 import logging
 from flask import Flask
 
-
+from src.infraestructure.config.config import Config
 from src.infraestructure.rest.error_handler import handle_exception
 from src.infraestructure.rest.team_controller import team_controller
 from src.container import Container
@@ -21,4 +21,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(host='0.0.0.0', port=3000)
+    app.run(host=Config.APP_HOST, port=Config.APP_PORT)
