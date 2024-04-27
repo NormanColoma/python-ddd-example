@@ -1,16 +1,18 @@
 import json
 import uuid
+from abc import ABC
 
 from flask import Blueprint, request, Response, current_app
 from src.application.application_response import ApplicationResponse
 from src.application.create_team.create_team import CreateTeam
 from src.application.create_team.create_team_command import CreateTeamCommand
+from src.application.get_team.get_team import GetTeam
 from src.application.get_team.get_team_command import GetTeamCommand
+from src.application.sign_player.sign_player import SignPlayer
 from src.application.sign_player.sign_player_command import SignPlayerCommand
 from src.domain.team.team_not_found_error import TeamNotFoundError
+from src.infraestructure.rest.base_controller import BaseController
 from src.infraestructure.rest.validator.rest_validators import validate_request_body
-
-team_controller = Blueprint('team_controller', __name__)
 
 post_request_contract = {
     'type': 'object',
@@ -21,41 +23,50 @@ post_request_contract = {
 }
 
 
-@team_controller.route('', methods=["POST"])
-@validate_request_body(request, request_contract=post_request_contract)
-def create_team_route():
-    body = request.get_json()
-    create_team: CreateTeam = current_app.container.create_team()
-    command = CreateTeamCommand(**body)
-    create_team.execute(command)
-    return Response(status=201, mimetype='application/json')
+class TeamController(BaseController):
+    def __init__(self, get_team: GetTeam, create_team: CreateTeam, sign_player: SignPlayer):
+        self.register_routes()
+        self.__get_team = get_team
+        self.__create_team = create_team
+        self.__sign_player = sign_player
 
-
-@team_controller.route('/<team_id>/players', methods=["POST"])
-@validate_request_body(request, request_contract=post_request_contract)
-def sign_player_route(team_id: str):
-    try:
+    @validate_request_body(request, request_contract=post_request_contract)
+    def create_team_route(self):
         body = request.get_json()
-        sign_player = current_app.container.sign_player()
-
-        command = SignPlayerCommand(player_name=body['name'], team_id=uuid.UUID(team_id))
-        sign_player.execute(command)
+        command = CreateTeamCommand(**body)
+        self.__create_team.execute(command)
         return Response(status=201, mimetype='application/json')
-    except Exception as e:
-        if isinstance(e, TeamNotFoundError):
-            return Response(response=json.dumps({'message': e.message}), status=404, mimetype='application/json')
-        raise e
 
+    @validate_request_body(request, request_contract=post_request_contract)
+    def sign_player_route(self, team_id: str):
+        try:
+            body = request.get_json()
 
-@team_controller.route('/<team_id>', methods=["GET"])
-def get_team_route(team_id: str):
-    try:
-        get_team = current_app.container.get_team()
-        command = GetTeamCommand(uuid.UUID(team_id))
+            command = SignPlayerCommand(player_name=body['name'], team_id=uuid.UUID(team_id))
+            self.__sign_player.execute(command)
+            return Response(status=201, mimetype='application/json')
+        except Exception as e:
+            if isinstance(e, TeamNotFoundError):
+                return Response(response=json.dumps({'message': e.message}), status=404, mimetype='application/json')
+            raise e
 
-        response: ApplicationResponse = get_team.execute(command)
-        return Response(response=json.dumps(response.to_json()), status=200, mimetype='application/json')
-    except Exception as e:
-        if isinstance(e, TeamNotFoundError):
-            return Response(response=json.dumps({'message': e.message}), status=404, mimetype='application/json')
-        raise e
+    def get_team_route(self, team_id: str):
+        try:
+            command = GetTeamCommand(uuid.UUID(team_id))
+            response: ApplicationResponse = self.__get_team.execute(command)
+            return Response(response=json.dumps(response.to_json()), status=200, mimetype='application/json')
+        except Exception as e:
+            if isinstance(e, TeamNotFoundError):
+                return Response(response=json.dumps({'message': e.message}), status=404, mimetype='application/json')
+            raise e
+
+    def register_routes(self):
+        self.__routes = Blueprint('team_controller', __name__)
+
+        self.__routes.add_url_rule('/<team_id>', 'get_team_route', self.get_team_route, methods=["GET"])
+        self.__routes.add_url_rule('', 'create_team_route', self.create_team_route, methods=["POST"])
+        self.__routes.add_url_rule('/<team_id>/players', 'sign_player_route', self.sign_player_route,
+                                   methods=["POST"])
+
+    def routes(self):
+        return self.__routes

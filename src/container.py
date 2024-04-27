@@ -10,9 +10,11 @@ from src.infraestructure.config.config import app_config
 from src.infraestructure.persistence.mongo.mongo_handler import MongoHandler
 from src.infraestructure.persistence.mongo.mongo_team_parser import MongoTeamParser
 from src.infraestructure.persistence.mongo.mongo_team_repository import MongoTeamRepository
+from src.infraestructure.rest.team_controller import TeamController
 
 
 class Container(containers.DeclarativeContainer):
+    # infra services
     database_handler = providers.Singleton(
         MongoHandler,
         config=app_config[os.getenv('ENV') or 'test']
@@ -22,11 +24,14 @@ class Container(containers.DeclarativeContainer):
 
     event_bus = providers.Singleton(FakeEventBus)
 
+    # repositories
     team_repository = providers.Singleton(
         MongoTeamRepository,
         database_handler,
         database_parser,
     )
+
+    # application services
 
     create_team = providers.Singleton(
         CreateTeam,
@@ -43,5 +48,13 @@ class Container(containers.DeclarativeContainer):
         SignPlayer,
         team_repository,
         event_bus
+    )
+
+    # controllers
+    team_controller = providers.Singleton(
+        TeamController,
+        get_team,
+        create_team,
+        sign_player
     )
 
