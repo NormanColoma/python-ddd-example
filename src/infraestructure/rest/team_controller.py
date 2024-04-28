@@ -1,8 +1,7 @@
 import json
 import uuid
-from abc import ABC
 
-from flask import Blueprint, request, Response, current_app
+from flask import Blueprint, request, Response
 from src.application.application_response import ApplicationResponse
 from src.application.create_team.create_team import CreateTeam
 from src.application.create_team.create_team_command import CreateTeamCommand
