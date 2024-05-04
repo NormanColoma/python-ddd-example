@@ -45,7 +45,7 @@ class TestPlayerDomainEntity:
         expected_player = {
             'id': str(self.id),
             'name': self.name,
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            'created_at': self.created_at,
         }
 
         assert player.to_object() == expected_player
