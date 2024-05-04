@@ -20,8 +20,6 @@ team_id = uuid.UUID("e154e156-6d6f-402f-b571-d83fc7d605f2")
 @pytest.fixture
 def app():
     app = create_app()
-    app.config['TESTING'] = True
-
     yield app
 
 
