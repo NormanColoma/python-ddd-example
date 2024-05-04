@@ -111,11 +111,10 @@ class TestSignPlayerEndpoint:
             execute_mock.assert_called_once()
 
     def test_should_return_201_when_player_signed(self, client):
-        id = uuid.uuid4()
-        team = Team.create(name="Test", id=id)
+        team = Team.create(name=team_name, id=team_id)
         Container.team_repository().save(team)
 
-        result = client.post('/teams/%s/players' % str(id), json={"name": player_name})
+        result = client.post('/teams/%s/players' % str(team_id), json={"name": player_name})
 
         assert result.status_code == 201
 
