@@ -1,13 +1,12 @@
 import logging
-from flask import Flask
 
-from src.infraestructure.config.config import Config
+from flask import Flask
+from src.infraestructure.config.config import Config, app_config
 from src.infraestructure.rest.error_handler import handle_exception
 from src.container import Container
 
 logging.basicConfig(level=logging.INFO, format='{"dateTime": "%(asctime)s", "level": "info", "message": "%(message)s"}',
                     datefmt='%Y-%m-%d %H:%M:%S')
-
 
 def create_app():
     flask_app = Flask(__name__)

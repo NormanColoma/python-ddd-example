@@ -5,7 +5,8 @@ from dependency_injector import containers, providers
 from src.application.create_team.create_team import CreateTeam
 from src.application.get_team.get_team import GetTeam
 from src.application.sign_player.sign_player import SignPlayer
-from src.infraestructure.bus.event.fake_event_bus import FakeEventBus
+from src.infraestructure.bus.event.kafka_event_bus import KafkaEventBus
+from src.infraestructure.bus.event.kafka_producer import KafkaProducer
 from src.infraestructure.config.config import app_config
 from src.infraestructure.persistence.mongo.mongo_handler import MongoHandler
 from src.infraestructure.persistence.mongo.mongo_team_parser import MongoTeamParser
@@ -22,7 +23,15 @@ class Container(containers.DeclarativeContainer):
 
     database_parser = providers.Singleton(MongoTeamParser)
 
-    event_bus = providers.Singleton(FakeEventBus)
+    producer = providers.Singleton(
+        KafkaProducer,
+        config=app_config[os.getenv('ENV') or 'test']
+    )
+
+    event_bus = providers.Singleton(
+        KafkaEventBus,
+        producer=producer
+    )
 
     # repositories
     team_repository = providers.Singleton(

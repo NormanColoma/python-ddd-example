@@ -35,5 +35,5 @@ class DomainEntity(ABC):
     def to_object(self) -> dict:
         return {
             'id': str(self.id),
-            'created_at': self.created_at,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
         }

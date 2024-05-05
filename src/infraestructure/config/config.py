@@ -9,6 +9,7 @@ class Config(object):
 class RunConfig(Config):
     MONGO_URI = os.getenv('MONGO_URI') or 'mongodb://admin:admin@localhost:27017'
     DB_NAME = os.getenv('DB_NAME') or 'teams'
+    KAFKA_URI = os.getenv('KAFKA_URI') or 'localhost:9092'
 
 
 class TestConfig(Config):

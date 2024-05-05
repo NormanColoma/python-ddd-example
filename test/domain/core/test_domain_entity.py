@@ -60,7 +60,7 @@ def test_to_object():
 
     expect_dict = {
         'id': str(id),
-        'created_at': created_at
+        'created_at': created_at.strftime('%Y-%m-%d %H:%M:%S')
     }
 
     assert foo.to_object() == expect_dict

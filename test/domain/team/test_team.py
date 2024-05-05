@@ -67,7 +67,7 @@ class TestTeamDomainEntity:
         expected_team = {
             'id': str(self.id),
             'name': self.name,
-            'created_at': self.created_at,
+            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'players': []
         }
 

@@ -19,6 +19,10 @@ class MongoTeamParser(DatabaseParser):
         document['_id'] = bson.Binary.from_uuid(domain.id)
         document['name'] = domain.name
         document['created_at'] = domain.created_at
-        document['players'] = [player.to_object() for player in domain.players]
+        document['players'] = [{
+            'id': str(player.id),
+            'name': player.name,
+            'created_at': player.created_at,
+        } for player in domain.players]
 
         return document

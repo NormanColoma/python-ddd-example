@@ -7,15 +7,16 @@ services:
     depends_on:
       - mongo
       - kafka
-      - kafka-ui
     environment:
       ENV: run
       MONGO_URI: "mongodb://admin:admin@mongo:27017"
+      KAFKA_URI: "kafka:9092"
       FLASK_DEBUG: 1
     ports:
       - "3000:3000"
     volumes:
-      - .:/usr/src/app
+      - ./:/usr/src/app
+      - ./:/usr/src/app/.venv
     networks:
       - python_ddd
   mongo:
@@ -36,6 +37,8 @@ services:
         ZOOKEEPER_TICK_TIME: 2000
       ports:
         - 22181:2181
+      networks:
+        - python_ddd
   kafka:
       image: confluentinc/cp-kafka:7.4.4
       container_name: kafka
@@ -43,6 +46,7 @@ services:
       depends_on:
         - zookeeper
       ports:
+        - 9092:9092
         - 29092:29092
       environment:
         KAFKA_BROKER_ID: 1
@@ -51,6 +55,8 @@ services:
         KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
         KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      networks:
+        - python_ddd
   kafka-ui:
       container_name: kafka-ui
       image: provectuslabs/kafka-ui:latest
@@ -62,6 +68,8 @@ services:
         KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092, localhost:29092, localhost:9092, kafka:9092
       depends_on:
         - kafka
+      networks:
+        - python_ddd
 volumes:
   api_modules:
     driver: local
