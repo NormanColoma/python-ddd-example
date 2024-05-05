@@ -7,6 +7,7 @@ from src.application.get_team.get_team import GetTeam
 from src.application.sign_player.sign_player import SignPlayer
 from src.infraestructure.bus.event.kafka_event_bus import KafkaEventBus
 from src.infraestructure.bus.event.kafka_producer import KafkaProducer
+from src.infraestructure.bus.event.kafka_topic_creator import KafkaTopicCreator
 from src.infraestructure.config.config import app_config
 from src.infraestructure.persistence.mongo.mongo_handler import MongoHandler
 from src.infraestructure.persistence.mongo.mongo_team_parser import MongoTeamParser
@@ -23,6 +24,10 @@ class Container(containers.DeclarativeContainer):
 
     database_parser = providers.Singleton(MongoTeamParser)
 
+    topic_creator = providers.Singleton(
+        KafkaTopicCreator,
+        config=app_config[os.getenv('ENV') or 'test']
+    )
     producer = providers.Singleton(
         KafkaProducer,
         config=app_config[os.getenv('ENV') or 'test']
@@ -30,7 +35,8 @@ class Container(containers.DeclarativeContainer):
 
     event_bus = providers.Singleton(
         KafkaEventBus,
-        producer=producer
+        producer=producer,
+        topic_creator=topic_creator
     )
 
     # repositories
