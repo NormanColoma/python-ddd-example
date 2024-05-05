@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "python-ddd-example"
+version = "0.1.0"
+description = ""
+authors = ["Norman <ua.norman@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+Flask = "^3.0.3"
+pymongo = "^4.7.1"
+jsonschema = "^4.22.0"
+freezegun = "^1.5.0"
+dependency-injector="4.41.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+pytest-mock = "^3.14.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

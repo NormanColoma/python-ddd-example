@@ -1,8 +1,0 @@
-six==1.15.0
-flask~=3.0.0
-pymongo~=4.3.3
-pytest~=7.2.0
-pytest-mock~=3.10.0
-jsonschema~=4.20.0
-dependency-injector~=4.41.0
-freezegun~=1.4.0

@@ -6,6 +6,8 @@ services:
     platform: linux/amd64
     depends_on:
       - mongo
+      - kafka
+      - kafka-ui
     environment:
       ENV: run
       MONGO_URI: "mongodb://admin:admin@mongo:27017"

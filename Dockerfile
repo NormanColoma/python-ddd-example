@@ -1,9 +1,9 @@
-FROM python:3.11-alpine
+FROM python:3.11.9-alpine
 
 WORKDIR /usr/src/app
 
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry && poetry config virtualenvs.create false && poetry install
 
 COPY src ./src
 COPY app.py .
