@@ -1,8 +1,10 @@
+import os
 import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
 
 from src.domain.core.domain_entity import DomainEntity
+from src.infraestructure.config.config import app_config
 
 
 class DomainEvent(ABC):
@@ -14,7 +16,7 @@ class DomainEvent(ABC):
         self.__entity = entity
         self.__entity_name = entity.__class__.__name__
         self.__entity_id = entity.id
-        self.topic = 'teams'
+        self.topic = app_config[os.getenv('ENV')].TOPIC
 
     def to_json(self) -> dict:
         return {

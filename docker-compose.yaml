@@ -9,8 +9,9 @@ services:
       - kafka
     environment:
       ENV: run
-      MONGO_URI: "mongodb://admin:admin@mongo:27017"
-      KAFKA_URI: "kafka:9092"
+      MONGO_URI: ${MONGO_URI}
+      KAFKA_URI: ${KAFKA_URI}
+      TOPIC: ${TOPIC}
       FLASK_DEBUG: 1
     ports:
       - "3000:3000"

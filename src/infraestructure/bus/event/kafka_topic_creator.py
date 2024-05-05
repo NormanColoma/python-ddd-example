@@ -16,12 +16,12 @@ class KafkaTopicCreator:
         metadata = client.cluster
         topic_list = []
 
-        if 'teams' not in metadata.topics():
+        if self.__config.TOPIC not in metadata.topics():
             admin_client = KafkaAdminClient(
                 bootstrap_servers=self.__config.KAFKA_URI,
                 client_id='test'
             )
 
 
-            topic_list.append(NewTopic(name="teams", num_partitions=1, replication_factor=1))
+            topic_list.append(NewTopic(name=self.__config.TOPIC, num_partitions=1, replication_factor=1))
             admin_client.create_topics(new_topics=topic_list, validate_only=False)
