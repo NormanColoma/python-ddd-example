@@ -1,6 +1,11 @@
+import concurrent
 import logging
+import threading
 
 from flask import Flask
+from kafka import KafkaConsumer
+
+from src.infraestructure.config import config
 from src.infraestructure.config.config import Config, app_config
 from src.infraestructure.rest.error_handler import handle_exception
 from src.container import Container
@@ -15,6 +20,14 @@ def create_app():
     return flask_app
 
 
+def start_consumers():
+    bus = Container.event_bus()
+    bus.listen()
+
 if __name__ == '__main__':
+    t1 = threading.Thread(target=start_consumers)
+    t1.daemon = True
+    t1.start()
+
     app = create_app()
     app.run(host=Config.APP_HOST, port=Config.APP_PORT)

@@ -5,6 +5,7 @@ from dependency_injector import containers, providers
 from src.application.create_team.create_team import CreateTeam
 from src.application.get_team.get_team import GetTeam
 from src.application.sign_player.sign_player import SignPlayer
+from src.infraestructure.bus.event.consumer.team_created_consumer import TeamCreatedConsumer
 from src.infraestructure.bus.event.kafka_event_bus import KafkaEventBus
 from src.infraestructure.bus.event.kafka_producer import KafkaProducer
 from src.infraestructure.bus.event.kafka_topic_creator import KafkaTopicCreator
@@ -33,10 +34,16 @@ class Container(containers.DeclarativeContainer):
         config=app_config[os.getenv('ENV') or 'test']
     )
 
+    team_created_consumer = providers.Singleton(
+        TeamCreatedConsumer,
+        config=app_config[os.getenv('ENV') or 'test']
+    )
+
     event_bus = providers.Singleton(
         KafkaEventBus,
         producer=producer,
-        topic_creator=topic_creator
+        topic_creator=topic_creator,
+        consumers=[team_created_consumer]
     )
 
     # repositories
