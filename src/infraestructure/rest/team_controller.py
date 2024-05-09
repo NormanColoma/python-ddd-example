@@ -11,16 +11,9 @@ from src.application.sign_player.sign_player import SignPlayer
 from src.application.sign_player.sign_player_command import SignPlayerCommand
 from src.domain.team.team_not_found_error import TeamNotFoundError
 from src.infraestructure.rest.base_controller import BaseController
+from src.infraestructure.rest.contracts.add_team_request_contract import AddTeamRequestContract
+from src.infraestructure.rest.contracts.sign_player_request_contract import SignPlayerRequestContract
 from src.infraestructure.rest.validator.rest_validators import validate_request_body
-
-post_request_contract = {
-    'type': 'object',
-    'properties': {
-        'name': {'type': 'string'},
-    },
-    'required': ['name']
-}
-
 
 class TeamController(BaseController):
     def __init__(self, get_team: GetTeam, create_team: CreateTeam, sign_player: SignPlayer):
@@ -29,14 +22,14 @@ class TeamController(BaseController):
         self.__create_team = create_team
         self.__sign_player = sign_player
 
-    @validate_request_body(request, request_contract=post_request_contract)
+    @validate_request_body(request, request_contract=AddTeamRequestContract)
     def create_team_route(self):
         body = request.get_json()
         command = CreateTeamCommand(**body)
         self.__create_team.execute(command)
         return Response(status=201, mimetype='application/json')
 
-    @validate_request_body(request, request_contract=post_request_contract)
+    @validate_request_body(request, request_contract=SignPlayerRequestContract)
     def sign_player_route(self, team_id: str):
         try:
             body = request.get_json()
