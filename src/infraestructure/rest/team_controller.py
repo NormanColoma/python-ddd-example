@@ -1,4 +1,5 @@
 import json
+import logging
 import uuid
 
 from flask import Blueprint, request, Response
@@ -49,6 +50,7 @@ class TeamController(BaseController):
             return Response(response=json.dumps(response.to_json()), status=200, mimetype='application/json')
         except Exception as e:
             if isinstance(e, TeamNotFoundError):
+                logging.info(e.message)
                 return Response(response=json.dumps({'message': e.message}), status=404, mimetype='application/json')
             raise e
 

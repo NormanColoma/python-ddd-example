@@ -1,0 +1,56 @@
+version: "3.7"
+
+services:
+  elasticsearch:
+    image: elasticsearch:8.13.4
+    ports:
+      - "9200:9200"
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data/
+    networks:
+      - python_ddd
+    environment:
+      ELASTIC_PASSWORD: kZvc2xoD8*OYLx-IleaP
+  kibana:
+    image: kibana:8.13.4
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    volumes:
+      - kb_data:/usr/share/kibana/data
+    networks:
+      - python_ddd
+    depends_on:
+      - elasticsearch
+  filebeat:
+    image: elastic/filebeat:8.13.4
+    user: root
+    environment:
+      - ELASTICSEARCH_HOSTS=elastic:9200
+      - KIBANA_HOST=kibana:5601
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=kZvc2xoD8*OYLx-IleaP
+    volumes:
+      - filebeat:/usr/share/filebeat/data
+      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["--strict.perms=false"]
+    configs:
+      - source: fb_config
+        target: /usr/share/filebeat/filebeat.yml
+    networks:
+      - python_ddd
+    depends_on:
+      - elasticsearch
+      - kibana
+volumes:
+  elastic_data:
+  kb_data:
+  filebeat:
+configs:
+  fb_config:
+    file: filebeat.yml
+
+networks:
+  python_ddd:
+    external: true

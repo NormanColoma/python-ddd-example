@@ -77,3 +77,4 @@ volumes:
     driver: local
 networks:
   python_ddd:
+    name: python_ddd

@@ -1,12 +1,9 @@
-import concurrent
 import logging
 import threading
 
 from flask import Flask
-from kafka import KafkaConsumer
 
-from src.infraestructure.config import config
-from src.infraestructure.config.config import Config, app_config
+from src.infraestructure.config.config import Config
 from src.infraestructure.rest.error_handler import handle_exception
 from src.container import Container
 

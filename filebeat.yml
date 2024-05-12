@@ -1,0 +1,28 @@
+filebeat.inputs:
+  - type: container
+    enabled: true
+    paths:
+      - '/var/lib/docker/containers/*/*.log'
+    json.keys_under_root: true
+    json.overwrite_keys: true
+    json.add_error_key: true
+    json.expand_keys: true
+processors:
+  - add_docker_metadata:
+      host: "unix:///var/run/docker.sock"
+
+output:
+  elasticsearch:
+    hosts: ["https://192.168.207.2:9200"]
+    username: "elastic"
+    password: "kZvc2xoD8*OYLx-IleaP"
+    ssl.verification_mode: none
+
+setup.kibana:
+  host: "http://kibana:5601"
+  username: "elastic"
+  password: "kZvc2xoD8*OYLx-IleaP"
+
+logging:
+  to_stderr: true
+  level: info
