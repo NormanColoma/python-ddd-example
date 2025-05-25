@@ -7,7 +7,7 @@ import pytest
 from src.domain.core.domain_entity import DomainEntity
 from src.domain.core.invalid_domain_entity_error import InvalidDomainEntityError
 
-id = uuid.UUID('1904b253-2fb4-44ea-a75e-6fee92dbe153')
+id = uuid.UUID("1904b253-2fb4-44ea-a75e-6fee92dbe153")
 created_at = datetime.now()
 
 
@@ -33,14 +33,14 @@ def test_should_raise_exception_while_instantiating_directly():
 
 def test_should_raise_exception_when_id_is_not_uuid():
     with pytest.raises(InvalidDomainEntityError) as e:
-        Foo(id='id', created_at=None)
-    assert e.value.message == 'Field id must be a valid UUID type'
+        Foo(id="id", created_at=None)
+    assert e.value.message == "Field id must be a valid UUID type"
 
 
 def test_should_raise_exception_when_created_at_is_not_date():
     with pytest.raises(InvalidDomainEntityError) as e:
-        Foo(id, created_at='date')
-    assert e.value.message == 'Field created_at must be a valid datetime type'
+        Foo(id, created_at="date")
+    assert e.value.message == "Field created_at must be a valid datetime type"
 
 
 def test_should_build_domain_entity():
@@ -58,9 +58,6 @@ def test_should_build_domain_entity_with_default_values():
 def test_to_object():
     foo = Foo(id, created_at)
 
-    expect_dict = {
-        'id': str(id),
-        'created_at': created_at.strftime('%Y-%m-%d %H:%M:%S')
-    }
+    expect_dict = {"id": str(id), "created_at": created_at.strftime("%Y-%m-%d %H:%M:%S")}
 
     assert foo.to_object() == expect_dict

@@ -16,16 +16,14 @@ class DomainEvent(ABC):
         self.__entity = entity
         self.__entity_name = entity.__class__.__name__
         self.__entity_id = entity.id
-        self.topic = app_config[os.getenv('ENV')].TOPIC
+        self.topic = app_config[os.getenv("ENV")].TOPIC
 
     def to_json(self) -> dict:
         return {
-            'id': str(self.__id),
-            'name': self.__name,
-            'entity': self.__entity.to_object(),
-            'entity_name': self.__entity_name,
-            'entity_id': str(self.__entity_id),
-            'occurred_at': self.__occurred_at.strftime('%Y-%m-%d %H:%M:%S'),
+            "id": str(self.__id),
+            "name": self.__name,
+            "entity": self.__entity.to_object(),
+            "entity_name": self.__entity_name,
+            "entity_id": str(self.__entity_id),
+            "occurred_at": self.__occurred_at.strftime("%Y-%m-%d %H:%M:%S"),
         }
-
-

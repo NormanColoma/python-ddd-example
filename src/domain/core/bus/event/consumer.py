@@ -8,4 +8,4 @@ class Consumer(ABC):
 
     @abstractmethod
     def consume(self):
-        raise NotImplementedError('Method publish must be implemented')
+        raise NotImplementedError("Method publish must be implemented")

@@ -9,10 +9,10 @@ from src.application.sign_player.sign_player import SignPlayer
 from src.application.sign_player.sign_player_command import SignPlayerCommand
 from src.domain.team.team_not_found_error import TeamNotFoundError
 
-team_id: UUID = uuid.UUID('cdd8f937-52a2-4291-baf1-51520c41a2ab')
+team_id: UUID = uuid.UUID("cdd8f937-52a2-4291-baf1-51520c41a2ab")
 created_at_str = "2022-12-14T12:28:17.893609Z"
 createdAt = datetime.fromisoformat(created_at_str)
-name: str = 'Messi'
+name: str = "Messi"
 
 repository = MagicMock()
 event_bus = MagicMock()
@@ -27,14 +27,14 @@ def app_service():
 
 
 def test_should_raise_exception_when_given_team_not_found(mocker, app_service):
-    team_domain_mock = mocker.patch('src.domain.team.team')
+    team_domain_mock = mocker.patch("src.domain.team.team")
     repository.find.return_value = None
 
     command = SignPlayerCommand(name, team_id)
 
     with pytest.raises(TeamNotFoundError) as e:
         app_service.execute(command)
-    assert e.value.message == 'Team not found'
+    assert e.value.message == "Team not found"
 
     repository.find.assert_called_once_with(team_id)
     repository.save.assert_not_called()
@@ -44,7 +44,7 @@ def test_should_raise_exception_when_given_team_not_found(mocker, app_service):
 
 
 def test_should_sign_player_correctly(mocker, app_service):
-    team_domain_mock = mocker.patch('src.domain.team.team')
+    team_domain_mock = mocker.patch("src.domain.team.team")
     repository.find.return_value = team_domain_mock
 
     command = SignPlayerCommand(name, team_id)

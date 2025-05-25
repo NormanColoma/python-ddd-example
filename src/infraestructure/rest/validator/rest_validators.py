@@ -1,4 +1,5 @@
 from functools import wraps
+
 from jsonschema import validate
 
 from src.infraestructure.rest.contracts.base_request_contract import BaseRequestContract
@@ -12,4 +13,5 @@ def validate_request_body(request, request_contract: BaseRequestContract):
             return f(*args, **kwargs)
 
         return wrapped
+
     return validate_request_body_decorator

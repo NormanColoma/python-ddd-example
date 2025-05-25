@@ -2,9 +2,9 @@ class SignPlayerRequestContract:
     @staticmethod
     def contract() -> dict:
         return {
-            'type': 'object',
-            'properties': {
-                'name': {'type': 'string'},
+            "type": "object",
+            "properties": {
+                "name": {"type": "string"},
             },
-            'required': ['name']
+            "required": ["name"],
         }

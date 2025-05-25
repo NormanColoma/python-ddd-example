@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Norman <ua.norman@gmail.com>"]
 readme = "README.md"
+packages = [{ include = "scripts" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -11,7 +12,7 @@ Flask = "^3.0.3"
 pymongo = "^4.7.1"
 jsonschema = "^4.22.0"
 freezegun = "^1.5.0"
-dependency-injector="4.41.0"
+dependency-injector = "4.41.0"
 kafka-python = "^2.0.2"
 python-dotenv = "^1.0.1"
 
@@ -19,7 +20,25 @@ python-dotenv = "^1.0.1"
 pytest = "^8.2.0"
 pytest-mock = "^3.14.0"
 pytest-env = "^1.1.3"
+ruff = "^0.11.11"
+
+[tool.poetry.scripts]
+lint = "scripts.lint:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+exclude = ["migrations", ".venv", "scripts", "data"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "W", "C90"]
+fixable = ["ALL"]

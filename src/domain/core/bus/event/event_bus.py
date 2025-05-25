@@ -10,5 +10,4 @@ class EventBus(ABC):
 
     @abstractmethod
     def publish(self, events: [DomainEvent]) -> None:
-        raise NotImplementedError('Method publish must be implemented')
-
+        raise NotImplementedError("Method publish must be implemented")

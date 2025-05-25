@@ -1,5 +1,6 @@
 from datetime import datetime
 from uuid import UUID
+
 from src.domain.core.aggregate_root import AggregateRoot
 from src.domain.player.player import Player
 from src.domain.team.invalid_team_error import InvalidTeamError
@@ -14,21 +15,15 @@ class Team(AggregateRoot):
         self.players = []
 
     @classmethod
-    def create(cls, name: str, id: UUID) -> 'Team':
-        team: Team = cls(
-            name=name,
-            id=id,
-            created_at=datetime.now())
+    def create(cls, name: str, id: UUID) -> "Team":
+        team: Team = cls(name=name, id=id, created_at=datetime.now())
         team.add_event(TeamCreatedEvent(entity=team))
 
         return team
 
     @classmethod
-    def build(cls, name: str, id: UUID, created_at: datetime, players: [Player]) -> 'Team':
-        team = cls(
-            name=name,
-            id=id,
-            created_at=created_at)
+    def build(cls, name: str, id: UUID, created_at: datetime, players: [Player]) -> "Team":
+        team = cls(name=name, id=id, created_at=created_at)
         team.players = players
         return team
 
@@ -39,9 +34,9 @@ class Team(AggregateRoot):
     @name.setter
     def name(self, name: str) -> None:
         if name is None:
-            raise InvalidTeamError('Field name cannot be set to empty')
+            raise InvalidTeamError("Field name cannot be set to empty")
         if not isinstance(name, str):
-            raise InvalidTeamError('Field name must be a valid string type')
+            raise InvalidTeamError("Field name must be a valid string type")
         self.__name = name
 
     @property
@@ -54,7 +49,7 @@ class Team(AggregateRoot):
 
     def sign_player(self, player_name: str) -> None:
         if len(self.players) >= 11:
-            raise InvalidTeamError('Team already has 11 players')
+            raise InvalidTeamError("Team already has 11 players")
         player = Player.create(player_name)
         self.players.append(player)
         self.add_event(TeamModifiedEvent(entity=self))
@@ -62,15 +57,14 @@ class Team(AggregateRoot):
     def to_object(self) -> dict:
         return {
             **super().to_object(),
-            'name': self.name,
-            'players': [player.to_object() for player in self.players],
+            "name": self.name,
+            "players": [player.to_object() for player in self.players],
         }
 
-    def __eq__(self, other: 'Team') -> bool:
+    def __eq__(self, other: "Team") -> bool:
         if isinstance(other, Team):
             return self.id == other.id
         return False
 
     def __str__(self):
         return self.name
-

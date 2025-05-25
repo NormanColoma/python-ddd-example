@@ -1,5 +1,5 @@
-from abc import ABC
+from typing import Protocol
 
 
-class ApplicationCommand(ABC):
+class ApplicationCommand(Protocol):
     pass

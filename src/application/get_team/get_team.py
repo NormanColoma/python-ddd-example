@@ -14,6 +14,6 @@ class GetTeam(ApplicationService):
         team: Team = self.team_repository.find(command.id)
 
         if team is None:
-            raise TeamNotFoundError('Team not found')
+            raise TeamNotFoundError("Team not found")
 
         return GetTeamResponse(team)

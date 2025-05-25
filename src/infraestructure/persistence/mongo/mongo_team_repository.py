@@ -16,12 +16,12 @@ class MongoTeamRepository(TeamRepository):
 
     def save(self, team: Team) -> None:
         document: dict = self.__team_parser.to_database_object(team)
-        self.__db.teams.replace_one({'_id': team.id}, document, upsert=True)
+        self.__db.teams.replace_one({"_id": team.id}, document, upsert=True)
 
     def find(self, id: UUID) -> Optional[Team]:
         document: dict = dict()
         try:
-            document = self.__db.teams.find_one({'_id': id})
+            document = self.__db.teams.find_one({"_id": id})
         except Exception as e:
             logging.info(e)
 

@@ -12,10 +12,9 @@ class KafkaEventBus(EventBus):
         topic_creator.create_topics()
 
     def publish(self, events: [DomainEvent]) -> None:
-        print('publishing domain events...')
+        print("publishing domain events...")
         for event in events:
             self.__producer.send(topic=event.topic, payload=event.to_json())
-
 
     def listen(self) -> None:
         for consumer in self.__consumers:

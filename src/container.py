@@ -18,32 +18,17 @@ from src.infraestructure.rest.team_controller import TeamController
 
 class Container(containers.DeclarativeContainer):
     # infra services
-    database_handler = providers.Singleton(
-        MongoHandler,
-        config=app_config[os.getenv('ENV') or 'test']
-    )
+    database_handler = providers.Singleton(MongoHandler, config=app_config[os.getenv("ENV") or "test"])
 
     database_parser = providers.Singleton(MongoTeamParser)
 
-    topic_creator = providers.Singleton(
-        KafkaTopicCreator,
-        config=app_config[os.getenv('ENV') or 'test']
-    )
-    producer = providers.Singleton(
-        KafkaProducer,
-        config=app_config[os.getenv('ENV') or 'test']
-    )
+    topic_creator = providers.Singleton(KafkaTopicCreator, config=app_config[os.getenv("ENV") or "test"])
+    producer = providers.Singleton(KafkaProducer, config=app_config[os.getenv("ENV") or "test"])
 
-    team_created_consumer = providers.Singleton(
-        TeamCreatedConsumer,
-        config=app_config[os.getenv('ENV') or 'test']
-    )
+    team_created_consumer = providers.Singleton(TeamCreatedConsumer, config=app_config[os.getenv("ENV") or "test"])
 
     event_bus = providers.Singleton(
-        KafkaEventBus,
-        producer=producer,
-        topic_creator=topic_creator,
-        consumers=[team_created_consumer]
+        KafkaEventBus, producer=producer, topic_creator=topic_creator, consumers=[team_created_consumer]
     )
 
     # repositories
@@ -61,22 +46,9 @@ class Container(containers.DeclarativeContainer):
         event_bus,
     )
 
-    get_team = providers.Singleton(
-        GetTeam,
-        team_repository
-    )
+    get_team = providers.Singleton(GetTeam, team_repository)
 
-    sign_player = providers.Singleton(
-        SignPlayer,
-        team_repository,
-        event_bus
-    )
+    sign_player = providers.Singleton(SignPlayer, team_repository, event_bus)
 
     # controllers
-    team_controller = providers.Singleton(
-        TeamController,
-        get_team,
-        create_team,
-        sign_player
-    )
-
+    team_controller = providers.Singleton(TeamController, get_team, create_team, sign_player)

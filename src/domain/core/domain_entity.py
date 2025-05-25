@@ -8,9 +8,9 @@ from src.domain.core.invalid_domain_entity_error import InvalidDomainEntityError
 
 class DomainEntity(ABC):
     @abstractmethod
-    def __init__(self, id: UUID = uuid.uuid4(), created_at: datetime = datetime.now()):
-        self.id = id
-        self.created_at = created_at
+    def __init__(self, id: UUID = None, created_at: datetime = None):
+        self.id = id or uuid.uuid4()
+        self.created_at = created_at or datetime.now()
 
     @property
     def id(self) -> UUID:
@@ -19,7 +19,7 @@ class DomainEntity(ABC):
     @id.setter
     def id(self, id: UUID) -> None:
         if not isinstance(id, UUID):
-            raise InvalidDomainEntityError('Field id must be a valid UUID type')
+            raise InvalidDomainEntityError("Field id must be a valid UUID type")
         self.__id = id
 
     @property
@@ -29,11 +29,11 @@ class DomainEntity(ABC):
     @created_at.setter
     def created_at(self, created_at: datetime) -> None:
         if not isinstance(created_at, datetime):
-            raise InvalidDomainEntityError('Field created_at must be a valid datetime type')
+            raise InvalidDomainEntityError("Field created_at must be a valid datetime type")
         self.__created_at = created_at
 
     def to_object(self) -> dict:
         return {
-            'id': str(self.id),
-            'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            "id": str(self.id),
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
         }

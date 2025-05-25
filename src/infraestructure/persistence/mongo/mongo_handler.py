@@ -1,5 +1,7 @@
 from typing import Any
-from pymongo import MongoClient, IndexModel
+
+from pymongo import IndexModel, MongoClient
+
 from src.infraestructure.config.config import Config
 from src.infraestructure.persistence.database_handler import DatabaseHandler
 
@@ -12,7 +14,7 @@ class MongoHandler(DatabaseHandler):
     def get_database(self) -> Any:
         db_uri = self.__config.MONGO_URI
         db_name = self.__config.DB_NAME
-        return MongoClient(db_uri, uuidRepresentation='standard')[db_name]
+        return MongoClient(db_uri, uuidRepresentation="standard")[db_name]
 
     def __initialize(self) -> None:
         db = self.get_database()

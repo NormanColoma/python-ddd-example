@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime
 from uuid import UUID
+
 import pytest
 
 from src.domain.core.aggregate_root import AggregateRoot
