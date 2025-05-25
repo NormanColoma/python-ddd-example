@@ -1,4 +1,5 @@
 import uuid
+from typing import List
 
 import bson
 
@@ -9,7 +10,7 @@ from src.infraestructure.persistence.database_parser import DatabaseParser
 
 class MongoTeamParser(DatabaseParser):
     def to_domain_object(self, database_object: dict) -> Team:
-        players: [Player] = [
+        players: List[Player] = [
             Player.build(player["name"], uuid.UUID(player["id"]), player["created_at"])
             for player in database_object["players"]
         ]

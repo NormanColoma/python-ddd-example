@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   api:
     build: .
@@ -18,7 +16,8 @@ services:
       - "3000:3000"
     volumes:
       - ./:/usr/src/app
-      - ./:/usr/src/app/.venv
+      - poetry_cache:/root/.cache/pypoetry
+      - poetry_virtualenv:/usr/src/app/.venv
     networks:
       - python_ddd
   mongo:
@@ -75,6 +74,8 @@ services:
 volumes:
   api_modules:
     driver: local
+  poetry_cache:
+  poetry_virtualenv:
 networks:
   python_ddd:
     name: python_ddd

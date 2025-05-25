@@ -1,6 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
+from typing import Optional
 from uuid import UUID
 
 from src.domain.core.invalid_domain_entity_error import InvalidDomainEntityError
@@ -8,7 +9,7 @@ from src.domain.core.invalid_domain_entity_error import InvalidDomainEntityError
 
 class DomainEntity(ABC):
     @abstractmethod
-    def __init__(self, id: UUID = None, created_at: datetime = None):
+    def __init__(self, id: Optional[UUID] = None, created_at: Optional[datetime] = None):
         self.id = id or uuid.uuid4()
         self.created_at = created_at or datetime.now()
 

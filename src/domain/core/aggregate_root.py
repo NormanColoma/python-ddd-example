@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from datetime import datetime
+from typing import List
 from uuid import UUID
 
 from src.domain.core.bus.event.domain_event import DomainEvent
@@ -12,7 +13,7 @@ class AggregateRoot(DomainEntity):
         super().__init__(id, created_at)
         self.__events = []
 
-    def pull_events(self) -> [DomainEvent]:
+    def pull_events(self) -> List[DomainEvent]:
         events = self.__events
         self.__events = []
         return events

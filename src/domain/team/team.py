@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 from uuid import UUID
 
 from src.domain.core.aggregate_root import AggregateRoot
@@ -22,7 +23,7 @@ class Team(AggregateRoot):
         return team
 
     @classmethod
-    def build(cls, name: str, id: UUID, created_at: datetime, players: [Player]) -> "Team":
+    def build(cls, name: str, id: UUID, created_at: datetime, players: List[Player]) -> "Team":
         team = cls(name=name, id=id, created_at=created_at)
         team.players = players
         return team
@@ -40,11 +41,11 @@ class Team(AggregateRoot):
         self.__name = name
 
     @property
-    def players(self) -> [Player]:
+    def players(self) -> List[Player]:
         return self.__players
 
     @players.setter
-    def players(self, players: [Player]) -> None:
+    def players(self, players: List[Player]) -> None:
         self.__players = players
 
     def sign_player(self, player_name: str) -> None:

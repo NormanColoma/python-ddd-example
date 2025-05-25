@@ -6,6 +6,7 @@ class Config(object):
     APP_HOST = os.getenv("APP_HOST") or "0.0.0.0"
     KAFKA_URI = os.getenv("KAFKA_URI") or "localhost:9092"
     MONGO_URI = os.getenv("MONGO_URI") or "mongodb://admin:admin@localhost:27017"
+    TOPIC = os.getenv("TOPIC") or "teams"
 
 
 class RunConfig(Config):

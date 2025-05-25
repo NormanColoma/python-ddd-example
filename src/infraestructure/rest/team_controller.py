@@ -28,7 +28,7 @@ class TeamController(BaseController):
     @validate_request_body(request, request_contract=AddTeamRequestContract)
     def create_team_route(self):
         body = request.get_json()
-        command = CreateTeamCommand(**body)
+        command = CreateTeamCommand(name=body["name"])
         self.__create_team.execute(command)
         return Response(status=201, mimetype="application/json")
 
