@@ -1,0 +1,12 @@
+line-length = 120
+target-version = "py311"
+exclude = ["migrations", ".venv", "scripts", "data"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[lint]
+select = ["E", "F", "I", "B", "W", "C90"]
+fixable = ["ALL"]

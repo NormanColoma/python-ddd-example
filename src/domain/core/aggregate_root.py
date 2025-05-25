@@ -13,7 +13,9 @@ class AggregateRoot(DomainEntity):
         super().__init__(id, created_at)
         self.__events = []
 
-    def pull_events(self) -> List[DomainEvent]:
+    def pull_events(
+        self,
+    ) -> List[DomainEvent]:
         events = self.__events
         self.__events = []
         return events
