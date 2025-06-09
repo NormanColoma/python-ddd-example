@@ -6,7 +6,7 @@ from src.domain.team.team_not_found_error import TeamNotFoundError
 from src.domain.team.team_repository import TeamRepository
 
 
-class GetTeam(ApplicationService):
+class GetTeam(ApplicationService[GetTeamCommand, GetTeamResponse]):
     def __init__(self, team_repository: TeamRepository):
         self.team_repository = team_repository
 

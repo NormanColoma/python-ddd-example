@@ -2,14 +2,15 @@ import os
 import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
+from typing import Generic
 
-from src.domain.core.domain_entity import DomainEntity
+from src.domain.types import E
 from src.infraestructure.config.config import app_config
 
 
-class DomainEvent(ABC):
+class DomainEvent(ABC, Generic[E]):
     @abstractmethod
-    def __init__(self, entity: DomainEntity, name: str):
+    def __init__(self, entity: E, name: str):
         self.__id = uuid.uuid4()
         self.__occurred_at = datetime.now()
         self.__name = name
